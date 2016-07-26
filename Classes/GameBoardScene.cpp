@@ -50,12 +50,12 @@ PuzzlePiece* GameBoard::getPuzzlePiece(int index, Vector<PuzzlePiece*> vector)
 void GameBoard::logic()
 {
 	auto size = Director::getInstance()->getWinSize();
-	Sprite *puzzleImage = Sprite::create("maldive3.png");
+	Sprite *puzzleImage = Sprite::create("maldive3.1.png");
 	puzzleImage->setAnchorPoint(Point(0, 1));
 	puzzleImage->setBlendFunc({ GL_DST_ALPHA, GL_ONE_MINUS_SRC_ALPHA });
 	vector<Size> sizes;
 	int distanceBeetweenPuzzleX = maskPuzzlePieces.at(0)->getContentSize().width * 0.5;
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 6; i++)
 	{		
 		Sprite *mask = maskPuzzlePieces.at(i);
 		Size cs = mask->getContentSize();
@@ -63,14 +63,43 @@ void GameBoard::logic()
 		mask->setPosition(Point(cs.width / 2, cs.height / 2));
 		RenderTexture *rt = RenderTexture::create(cs.width, cs.height);
 		if (i == 0)
-		{
-			auto check2 = i * -cs.width;
-			puzzleImage->setPosition(Point(i * -cs.width, cs.height));
+		{			
+			puzzleImage->setPosition(Point(i * -cs.width, cs.height));			
 		}
 		else
 		{	
-			auto _x = (sizes.at(i - 1).width * 32) / 100; // 32%
-			puzzleImage->setPosition(Point(_x - sizes.at(i - 1).width, cs.height));
+			if (i == 1)
+			{
+				auto _x = (sizes.at(i - 1).width * 32) / 100; // 32%
+				getPuzzlePiece(0, this->maskPuzzlePieces)->setConvex_X(_x);
+				puzzleImage->setPosition(Point(_x - sizes.at(i - 1).width, cs.height));
+			}
+			else
+			{
+				if (i == 2)
+				{
+					auto _x = (sizes.at(2).width * 34.2) / 100;
+					getPuzzlePiece(2, this->maskPuzzlePieces)->setConvex_X(_x);
+					puzzleImage->setPosition(Point(_x - (sizes.at(0).width + sizes.at(1).width - 
+													getPuzzlePiece(0, this->maskPuzzlePieces)->getConvex_X()), cs.height));
+				}	
+				else
+				{					
+					if (i == 3)
+					{
+						puzzleImage->setPosition(Point(getPuzzlePiece(2, this->maskPuzzlePieces)->getConvex_X() -
+													(sizes.at(0).width + sizes.at(1).width + sizes.at(2).width -
+														(getPuzzlePiece(0, this->maskPuzzlePieces)->getConvex_X() + getPuzzlePiece(2, this->maskPuzzlePieces)->getConvex_X())), cs.height));
+					}
+					else
+					{
+						puzzleImage->setPosition(Point(getPuzzlePiece(2, this->maskPuzzlePieces)->getConvex_X() -
+													(sizes.at(0).width + sizes.at(1).width + sizes.at(2).width + sizes.at(3).width -
+														(getPuzzlePiece(0, this->maskPuzzlePieces)->getConvex_X() + getPuzzlePiece(2, this->maskPuzzlePieces)->getConvex_X()*2)), cs.height));
+					}
+					
+				}
+			}
 		}
 		rt->beginWithClear(0, 0, 0, 0);
 		mask->visit();
@@ -79,22 +108,17 @@ void GameBoard::logic()
 		rt->end();
 		PuzzlePiece *rtSprite = PuzzlePiece::createWithTexture(rt->getSprite()->getTexture());
 		addPuzzlePiece(rtSprite, &puzzlePieces);
-		addChild(rtSprite);	
+		addChild(rtSprite);			
 		rtSprite->setFlippedY(true);
 		auto check = (i + 0.5) * cs.width;
-		rtSprite->setPosition(Point(distanceBeetweenPuzzleX, size.height - cs.height / 2));
-		distanceBeetweenPuzzleX = distanceBeetweenPuzzleX + 200;
-
-		/*if (i == 0)
+		if (i == 4)
 		{
-			//rtSprite->setPosition(Point((i + 0.5) * cs.width, size.height - cs.height / 2));
+			rtSprite->setPosition(Vec2(300, 300));
 		}
 		else
 		{
-			if (i == 1)
-			{
-				rtSprite->setPosition(Point(55 + 122, size.height - cs.height / 2));
-			}
-		}*/
+			rtSprite->setPosition(Point(distanceBeetweenPuzzleX, size.height - cs.height / 2));
+		}		
+		distanceBeetweenPuzzleX = distanceBeetweenPuzzleX + 100;
 	}
 }
