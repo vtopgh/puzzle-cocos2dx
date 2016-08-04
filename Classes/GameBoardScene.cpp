@@ -55,7 +55,7 @@ void GameBoard::logic()
 	puzzleImage->setBlendFunc({ GL_DST_ALPHA, GL_ONE_MINUS_SRC_ALPHA });
 	vector<Size> sizes;
 	int distanceBeetweenPuzzleX = maskPuzzlePieces.at(0)->getContentSize().width * 0.5;
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 8; i++)
 	{		
 		Sprite *mask = maskPuzzlePieces.at(i);
 		Size cs = mask->getContentSize();
@@ -66,41 +66,48 @@ void GameBoard::logic()
 		{			
 			puzzleImage->setPosition(Point(i * -cs.width, cs.height));			
 		}
-		else
-		{	
-			if (i == 1)
-			{
-				auto _x = (sizes.at(i - 1).width * 32) / 100; // 32%
-				getPuzzlePiece(0, this->maskPuzzlePieces)->setConvex_X(_x);
-				puzzleImage->setPosition(Point(_x - sizes.at(i - 1).width, cs.height));
-			}
-			else
-			{
-				if (i == 2)
-				{
-					auto _x = (sizes.at(2).width * 34.2) / 100;
-					getPuzzlePiece(2, this->maskPuzzlePieces)->setConvex_X(_x);
-					puzzleImage->setPosition(Point(_x - (sizes.at(0).width + sizes.at(1).width - 
-													getPuzzlePiece(0, this->maskPuzzlePieces)->getConvex_X()), cs.height));
-				}	
-				else
-				{					
-					if (i == 3)
-					{
-						puzzleImage->setPosition(Point(getPuzzlePiece(2, this->maskPuzzlePieces)->getConvex_X() -
-													(sizes.at(0).width + sizes.at(1).width + sizes.at(2).width -
-														(getPuzzlePiece(0, this->maskPuzzlePieces)->getConvex_X() + getPuzzlePiece(2, this->maskPuzzlePieces)->getConvex_X())), cs.height));
-					}
-					else
-					{
-						puzzleImage->setPosition(Point(getPuzzlePiece(2, this->maskPuzzlePieces)->getConvex_X() -
-													(sizes.at(0).width + sizes.at(1).width + sizes.at(2).width + sizes.at(3).width -
-														(getPuzzlePiece(0, this->maskPuzzlePieces)->getConvex_X() + getPuzzlePiece(2, this->maskPuzzlePieces)->getConvex_X()*2)), cs.height));
-					}
-					
-				}
-			}
+		else if (i == 1)
+		{
+			auto _x = (sizes.at(i - 1).width * 32) / 100; // 32%
+			getPuzzlePiece(0, this->maskPuzzlePieces)->setConvex_X(_x);
+			puzzleImage->setPosition(Point(_x - sizes.at(i - 1).width, cs.height));
 		}
+		else if (i == 2)
+		{
+			auto _x = (sizes.at(2).width * 34.2) / 100;// 34 norm
+			getPuzzlePiece(2, this->maskPuzzlePieces)->setConvex_X(_x);
+			puzzleImage->setPosition(Point(_x - (sizes.at(0).width + sizes.at(1).width -
+				getPuzzlePiece(0, this->maskPuzzlePieces)->getConvex_X()), cs.height));
+		}
+		else if (i == 3)
+		{
+			puzzleImage->setPosition(Point(getPuzzlePiece(2, this->maskPuzzlePieces)->getConvex_X() -
+				(sizes.at(0).width + sizes.at(1).width + sizes.at(2).width -
+				(getPuzzlePiece(0, this->maskPuzzlePieces)->getConvex_X() + getPuzzlePiece(2, this->maskPuzzlePieces)->getConvex_X())), cs.height));
+		}
+		else if (i == 4)
+		{
+			puzzleImage->setPosition(Point(getPuzzlePiece(2, this->maskPuzzlePieces)->getConvex_X() -
+				(sizes.at(0).width + sizes.at(1).width + sizes.at(2).width + sizes.at(3).width -
+				(getPuzzlePiece(0, this->maskPuzzlePieces)->getConvex_X() + getPuzzlePiece(2, this->maskPuzzlePieces)->getConvex_X() * 2)), cs.height));
+		}
+		else if (i == 5)
+		{			
+			auto _x = (sizes.at(2).width * 30.5) / 100;
+			puzzleImage->setPosition(Point(_x -
+				(sizes.at(0).width + sizes.at(1).width + sizes.at(2).width + sizes.at(3).width + sizes.at(4).width -
+				(getPuzzlePiece(0, this->maskPuzzlePieces)->getConvex_X() + getPuzzlePiece(2, this->maskPuzzlePieces)->getConvex_X() * 3)), cs.height));
+		}
+		else if (i == 6)
+		{			
+			auto _x = (sizes.at(6).width * 27) / 100;
+			puzzleImage->setPosition(Point(0 * -cs.width, cs.height + sizes.at(1).height));
+		}
+		else if (i == 7)
+		{
+			puzzleImage->setPosition(Point(0 * -cs.width, cs.height + sizes.at(1).height));
+		}
+		
 		rt->beginWithClear(0, 0, 0, 0);
 		mask->visit();
 		puzzleImage->visit();
@@ -110,10 +117,17 @@ void GameBoard::logic()
 		addPuzzlePiece(rtSprite, &puzzlePieces);
 		addChild(rtSprite);			
 		rtSprite->setFlippedY(true);
-		auto check = (i + 0.5) * cs.width;
 		if (i == 4)
 		{
 			rtSprite->setPosition(Vec2(300, 300));
+		}
+		else if (i == 5)
+		{
+			rtSprite->setPosition(Vec2(200, 200));
+		}
+		else if (i == 6)
+		{
+			rtSprite->setPosition(Vec2(100, 100));
 		}
 		else
 		{
