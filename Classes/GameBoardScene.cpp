@@ -55,7 +55,7 @@ void GameBoard::logic()
 	puzzleImage->setBlendFunc({ GL_DST_ALPHA, GL_ONE_MINUS_SRC_ALPHA });
 	vector<Size> sizes;
 	int distanceBeetweenPuzzleX = maskPuzzlePieces.at(0)->getContentSize().width * 0.5;
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 13; i++)
 	{		
 		Sprite *mask = maskPuzzlePieces.at(i);
 		Size cs = mask->getContentSize();
@@ -100,12 +100,38 @@ void GameBoard::logic()
 		}
 		else if (i == 6)
 		{			
-			auto _x = (sizes.at(6).width * 27) / 100;
-			puzzleImage->setPosition(Point(0 * -cs.width, cs.height + sizes.at(1).height));
+			auto _y = (sizes.at(0).height* 26) / 100;			
+			puzzleImage->setPosition(Point(0 * -cs.width, cs.height + sizes.at(0).height - _y));
 		}
 		else if (i == 7)
 		{
-			puzzleImage->setPosition(Point(0 * -cs.width, cs.height + sizes.at(1).height));
+			auto _x = (sizes.at(6).width * 25) / 100;
+			auto _y = (sizes.at(1).height * 32) / 100;
+			puzzleImage->setPosition(Point(_x - sizes.at(i - 1).width, cs.height + sizes.at(1).height - _y));
+		}
+		else if (i == 8)
+		{
+			auto _y = (sizes.at(0).height * 26) / 100;
+			auto _x = (sizes.at(6).width * 28) / 100;
+			puzzleImage->setPosition(Point(_x - (sizes.at(i - 1).width)*2, cs.height + sizes.at(0).height - _y));
+		}
+		else if (i == 9)
+		{
+			auto _x = (sizes.at(6).width * 22) / 100;
+			auto _y = (sizes.at(1).height * 32) / 100;
+			puzzleImage->setPosition(Point(_x - sizes.at(i - 1).width*2, cs.height + sizes.at(1).height - _y));
+		}
+		else if (i == 10)
+		{
+			auto _y = (sizes.at(0).height * 26) / 100;
+			auto _x = (sizes.at(6).width * 32) / 100;
+			puzzleImage->setPosition(Point(_x - (sizes.at(i - 1).width) * 4, cs.height + sizes.at(0).height - _y));
+		}
+		else if (i = 11)
+		{
+			auto _x = (sizes.at(6).width * 22) / 100;
+			auto _y = (sizes.at(1).height * 32) / 100;
+			puzzleImage->setPosition(Point(_x - sizes.at(i - 1).width * 5, cs.height + sizes.at(1).height - _y));
 		}
 		
 		rt->beginWithClear(0, 0, 0, 0);
@@ -117,18 +143,10 @@ void GameBoard::logic()
 		addPuzzlePiece(rtSprite, &puzzlePieces);
 		addChild(rtSprite);			
 		rtSprite->setFlippedY(true);
-		if (i == 4)
+		if (i > 4)
 		{
 			rtSprite->setPosition(Vec2(300, 300));
-		}
-		else if (i == 5)
-		{
-			rtSprite->setPosition(Vec2(200, 200));
-		}
-		else if (i == 6)
-		{
-			rtSprite->setPosition(Vec2(100, 100));
-		}
+		}			
 		else
 		{
 			rtSprite->setPosition(Point(distanceBeetweenPuzzleX, size.height - cs.height / 2));
